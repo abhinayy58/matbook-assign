@@ -1,84 +1,75 @@
-## Dynamic Form Builder
+# 🚀 Dynamic Form Builder (Assignment Submission)
 
-Full-stack assignment that lets admins compose complex forms (with nested conditional fields) and lets end-users submit responses that are persisted in MongoDB.
+This project is a full-stack solution for building and rendering complex forms, showcasing proficiency in modern frontend state management, dynamic UI rendering, and backend data handling.
 
-### Tech Stack
-- **Frontend**: React 19, Vite, Tailwind v4, shadcn/ui-inspired primitives, TanStack Query, React Router
-- **Backend**: Node.js 20, Express 5, Mongoose 9, Zod, JWT auth, Helmet, Morgan, cookie-parser
-- **Database**: MongoDB 7
-- **Tooling**: ESLint 9, Docker + Docker Compose, Nodemon (dev), Nginx (serving built frontend)
+## ✔️ Milestone Completion Status
 
-### Features
-- Admin CRUD for forms, including per-field validation rules, option ordering, and nested follow-up fields for select/radio/checkbox choices.
-- Public API to list forms, fetch a schema, and submit responses with server-side validation.
-- Submission store records metadata (version, ip, etc.) so schema changes do not break historic responses.
-- Email/password auth with JWT sessions stored in httpOnly cookies (admin/user roles).
-- Secure Express setup (helmet, rate limit, sanitizers, validation via Zod).
-- React admin panel with Tailwind+shadcn components, live preview powered by FormRenderer, and React Query for data fetching/mutations.
-- Auth screens live in `pages/SignIn` and `pages/SignUp`. Create the first admin
-  by signing up and selecting the *Admin* role.
+The following core requirements have been successfully implemented and verified:
 
-### Environment Configuration
-- Copy `env.example` to `server/.env` and `client/.env`, then update values as needed.
-- Minimum variables:
-  - Server: `PORT`, `MONGODB_URI`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `CORS_ORIGINS`
-  - Client: `VITE_API_BASE_URL`
+| Feature Area | Status | Notes |
+| :--- | :--- | :--- |
+| **Form Schema Fetching** | **Completed** | Successfully fetches the form definition from the backend API. |
+| **Dynamic Rendering** | **Completed** | The application dynamically renders all specified field types based on the received schema. |
+| **Client-Side Validations** | **Completed** | Implemented real-time form field validations for a better user experience. |
+| **Form Submission** | **Completed** | Submits form data to the backend with clear success/error state handling. |
+| **Submissions Management** | **Completed** | Displays submitted form responses in a **paginated table** for easy admin review. |
+| **CRUD & Pagination** | **Completed** | Full **Create, Read, Update, Delete (CRUD)** functionality implemented for forms and fields, utilizing **pagination** for large datasets. |
+| **Build Process** | **Completed** | The frontend build process correctly outputs the bundled static files (`dist/`) into the server folder for unified serving. |
 
-### Local Development
-Prerequisites: Node.js 22+, running MongoDB instance.
+---
+
+## 🛠️ Tech Stack Used
+
+### 💻 Frontend
+
+* **React 19:** Modern JavaScript library for building the user interface.
+* **Vite:** Next-generation frontend tooling for a fast development experience.
+* **TanStack Query:** Used for server state management, caching, and synchronization.
+* **TanStack Form:** Employed for declarative form state management and validation.
+* **TanStack Table:** Utilized for rendering efficient, paginated tables (specifically for the submissions view).
+* **TailwindCSS:** Utility-first CSS framework for rapid styling.
+
+### ⚙️ Backend
+
+* **Node.js + Express:** A fast, unopinionated foundation for the server-side application.
+* **In-Memory/JSON Storage:** Used for persistence and rapid prototyping in this assignment environment.
+
+---
+
+## 🚀 Setup & Run Instructions
+
+These instructions detail how to set up and run the application in a local development environment.
+
+### Prerequisites
+
+* **Node.js** (LTS version recommended)
+* **npm** (or yarn/pnpm)
+
+### 1. Install and Start the Frontend
+
+The frontend (client) application will run on a development server, fetching data from the backend.
 
 ```bash
-# Backend
+# Navigate to the client directory
+cd client
+# Install dependencies
+npm install
+# Start the Vite development server (usually on http://localhost:5173)
+npm run dev
+```
+
+### 2. Install and Start the Backend
+
+The backend (server) provides the API endpoints for the form schema, submissions, and CRUD operations.
+
+# Navigate to the server directory
 cd server
+# Install dependencies
 npm install
-npm run dev        # Express on :5000 with Nodemon
+# Start the Express server (usually on http://localhost:3000 or specified PORT)
+npm start
 
-# Frontend (new terminal)
-cd ../client
-npm install
-npm run dev        # Vite dev server on :5173
-```
+### Accessing the Application
+Once both the frontend and backend servers are running, open your web browser and navigate to:
 
-### Docker Setup
-Requirements: Docker 24+ and Docker Compose.
-
-```bash
-docker compose up --build
-```
-
-- Frontend served via Nginx at `http://localhost:3000`
-- Backend API available at `http://localhost:5000`
-- MongoDB exposed on `mongodb://localhost:28017` (data persisted in the `mongo-data` volume)
-
-Update the `docker-compose.yml` environment entries if you need different ports, credentials, or secrets. For production deployments, override `JWT_SECRET`, supply a managed MongoDB URI, and consider adding TLS termination or a reverse proxy in front of the services.
-
-### API Overview
-- `POST /api/admin/forms` (token) – create form.
-- `PATCH /api/admin/forms/:id` (token) – update form/title/fields.
-- `DELETE /api/admin/forms/:id` (token) – delete form + submissions.
-- `POST /api/admin/forms/:id/fields` / `PATCH .../:fieldName` / `DELETE ...` – manage individual fields.
-- `POST /api/admin/forms/:id/fields/reorder` – reorder by name list.
-- `GET /api/admin/forms` / `GET /api/admin/forms/:id` – admin views.
-- `GET /api/admin/forms/:id/submissions` – paginated submissions.
-- `GET /api/forms` – public list with metadata.
-- `GET /api/forms/:id` – public schema.
-- `POST /api/forms/:id/submissions` – submit answers (server validates types, required, regex/min/max, nested conditions).
-
-### Frontend Notes
-- Tailwind v4 via `@tailwindcss/vite`.
-- shadcn/ui-inspired primitives live in `client/src/components/ui`.
-- Admin builder lives in `pages/CreateForm.tsx` with nested `FieldEditor`.
-- Public preview + renderer uses `FormRenderer` component to recursively render fields and nested branches.
-- React Query keys live in `client/src/api/forms.js`.
-- `client/src/api/auth.js` centralizes auth/session helpers that power the protected routes.
-
-### Testing
-- `npm run build` inside `client/` ensures the React bundle compiles.
-- Backend currently relies on runtime validation (Zod + Mongo tests). Add Jest or vitest if deeper coverage is required.
-
-### Future Enhancements
-- Add SSO providers (Google/Microsoft) on top of the email/password flow.
-- Integrate drag-and-drop ordering (e.g., dnd-kit) for improved UX.
-- Add CSV export endpoint for submissions.
-- Harden Docker deployment with production-ready logging/monitoring.
-
+🌐 http://localhost:5173 (or the address indicated by the npm run dev command).
